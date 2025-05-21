@@ -10,6 +10,7 @@ from .config import AssistantCondaConfig
 from .core import stream_response, CondaAssistant
 from .mcp.models import ClientType
 from .mcp.service import MCPService
+from typing import Dict
 
 console = Console()
 

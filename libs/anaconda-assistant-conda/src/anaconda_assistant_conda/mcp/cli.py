@@ -3,6 +3,8 @@ MCP CLI module - Direct entry point for MCP commands.
 """
 from typing import List
 from ..cli import mcp_app
+from typing import List, Dict
+
 
 def conda_plugin(args: List[str]) -> int:
     """

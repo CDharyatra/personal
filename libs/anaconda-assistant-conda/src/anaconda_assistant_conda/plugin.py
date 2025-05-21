@@ -18,6 +18,11 @@ from .core import stream_response
 from .debug_config import debug_config, config_command_styled
 from .get_clean_error_report_command import get_clean_error_report_command
 
+# Add this at the very top of plugin.py
+import sys
+print("Python path:", sys.path)
+print("Loading plugin.py")
+
 
 ENV_COMMANDS = {
     "env_config",
