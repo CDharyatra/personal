@@ -1,7 +1,8 @@
 import sys
 import traceback
-from typing import Any, Generator
+from typing import Any, Generator, List, cast
 import pytest
+import typer
 
 from anaconda_assistant.config import AssistantConfig
 from conda import CondaError, plugins
@@ -16,6 +17,7 @@ from .config import AssistantCondaConfig, DebugErrorMode
 from .core import stream_response
 from .debug_config import debug_config, config_command_styled
 from .get_clean_error_report_command import get_clean_error_report_command
+from typing import Dict, List, Optional
 
 
 ENV_COMMANDS = {
@@ -118,6 +120,55 @@ def error_handler(command: str) -> None:
             sys.exit(1)
 
     ExceptionHandler._print_conda_exception = assistant_exception_handler  # type: ignore
+
+def conda_plugin(args: List[str]) -> int:
+    """
+    Entry point for the conda plugin.
+    
+    This function is called by conda when the plugin is invoked.
+    
+    Args:
+        args: Command line arguments
+        
+    Returns:
+        int: Exit code
+    """
+    # Check if the command is 'mcp'
+    if len(args) > 1 and args[1] == 'mcp':
+        # Import the main CLI app which includes the MCP commands
+        from .cli import app
+        # Pass the arguments to the CLI app
+        # We need to keep 'mcp' in the arguments
+        return app(args[1:])
+    
+    # Keep the rest of your existing code unchanged
+    if len(args) > 1 and args[1] == "assist":
+        # Remove the first argument (which is 'conda')
+        args = args[1:]
+        
+        # If no query is provided, show help
+        if len(args) <= 1:
+            return app(["assist", "--help"])  # Use app instead of cli_app
+        
+        # Join the remaining arguments as the query
+        query = " ".join(args[1:])
+        
+        # Import here to avoid circular imports
+        from .core import stream_response
+        
+        # Use the system message from the original code
+        system_message = "You are an assistant that helps with conda-related questions."
+        
+        # Stream the response
+        stream_response(system_message=system_message, prompt=query)
+        
+        return 0
+    
+    # If the command is not recognized, show help
+    return app(["--help"])  # Use app instead of cli_app
+    
+    # If the command is not recognized, show help
+    return cli_app(["--help"])
 
 
 @plugins.hookimpl
