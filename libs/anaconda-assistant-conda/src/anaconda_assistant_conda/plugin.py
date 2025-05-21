@@ -1,6 +1,6 @@
 import sys
 import traceback
-from typing import Any, Generator, List, cast
+from typing import Any, Generator, List, cast, Dict, Optional
 import pytest
 import typer
 
@@ -17,7 +17,6 @@ from .config import AssistantCondaConfig, DebugErrorMode
 from .core import stream_response
 from .debug_config import debug_config, config_command_styled
 from .get_clean_error_report_command import get_clean_error_report_command
-from typing import Dict, List, Optional
 
 
 ENV_COMMANDS = {
@@ -167,9 +166,6 @@ def conda_plugin(args: List[str]) -> int:
     # If the command is not recognized, show help
     return app(["--help"])  # Use app instead of cli_app
     
-    # If the command is not recognized, show help
-    return cli_app(["--help"])
-
 
 @plugins.hookimpl
 def conda_subcommands() -> Generator[plugins.CondaSubcommand, None, None]:
