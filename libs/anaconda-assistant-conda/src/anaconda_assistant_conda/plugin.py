@@ -179,6 +179,13 @@ def conda_subcommands() -> Generator[plugins.CondaSubcommand, None, None]:
         summary="Anaconda Assistant integration",
         action=lambda args: app(args=args),
     )
+        # Add MCP as a direct subcommand
+    yield plugins.CondaSubcommand(
+        name="mcp",
+        summary="Model Context Protocol integration",
+        action=lambda args: app(["mcp"] + list(args)),
+    )
+    
 
 
 @plugins.hookimpl

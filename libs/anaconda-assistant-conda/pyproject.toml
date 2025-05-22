@@ -21,7 +21,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 
 [project.entry-points.conda]
-anaconda-assistant = "anaconda_assistant_conda.plugin:conda_plugin"
+anaconda-assistant = "anaconda_assistant_conda.plugin"
 mcp = "anaconda_assistant_conda.mcp.cli:conda_plugin"
 
 [project.optional-dependencies]
